@@ -133,7 +133,8 @@
 					<span id="fame-cost-interpretation-normal-learning-points"></span>
 					learning points to level from
 					<span id="fame-cost-interpretation-normal-level"></span>
-					to 100.
+					to
+					<span id="fame-cost-interpretation-normal-level-goal"></span>.
 				</div>
 				<div id="fame-cost-interpretation-elite">
 					It will cost
@@ -421,15 +422,16 @@
 			$('#fame-cost-interpretation-normal-learning-points-fame').textContent = prettyNum(cost.fame * .8);
 			$('#fame-cost-interpretation-normal-learning-points').textContent = prettyNum(cost.learningPoints);
 			$('#fame-cost-interpretation-normal-level').textContent = level;
+			$('#fame-cost-interpretation-normal-level-goal').textContent = Math.min(levelGoal, 100);
 		} else
 			$('#fame-cost-interpretation-normal').classList.add('hidden');
 
 		if (levelGoal > 100 && level < levelGoal) {
 			$('#fame-cost-interpretation-elite').classList.remove('hidden');
-			let cost = sumEliteLevelCost(Math.max(level, 100) - 100, levelGoal - 1);
+			let cost = sumEliteLevelCost(Math.max(level, 100) - 100, levelGoal - 100);
 			$('#fame-cost-interpretation-elite-fame-credit').textContent = prettyNum(cost.fameCredit);
 			$('#fame-cost-interpretation-elite-silver').textContent = prettyNum(cost.silver);
-			$('#fame-cost-interpretation-elite-level').textContent = 100;
+			$('#fame-cost-interpretation-elite-level').textContent = Math.max(level, 100);
 			$('#fame-cost-interpretation-elite-level-goal').textContent = levelGoal;
 		} else
 			$('#fame-cost-interpretation-elite').classList.add('hidden');
