@@ -227,7 +227,7 @@
 		return el;
 	};
 	const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-	const prettyNum = value => Math.round(value).toLocaleString();
+	const prettyNum = (value, maximumFractionDigits = 0) => value.toLocaleString(undefined, {maximumFractionDigits});
 
 	// https://raw.githubusercontent.com/broderickhyman/ao-bin-dumps/master/achievements.xml
 	const data = {
@@ -482,7 +482,7 @@
 			let row = createEl('tr', $('#lp-normal'));
 			createEl('td', row, i + 1);
 			createEl('td', row, prettyNum(data.normal[i].fame));
-			createEl('td', row, prettyNum(data.normal[i].learningPoints * gearSlotMultiplier));
+			createEl('td', row, prettyNum(data.normal[i].learningPoints * gearSlotMultiplier, 2));
 			createEl('td', row, prettyNum(data.normal[i].fame / data.normal[i].learningPoints));
 		}
 
