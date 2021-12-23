@@ -3,6 +3,26 @@
 		background: black;
 		color: white;
 		font-family: sans-serif;
+		min-width: 800px;
+		position: relative;
+	}
+
+	.ad {
+		position: absolute;
+		right: 0;
+		color: red;
+	}
+
+	@media (min-width: 1500px) {
+		.ad.small {
+			display: none;
+		}
+	}
+
+	@media not all and (min-width: 1500px) {
+		.ad.large {
+			display: none;
+		}
 	}
 
 	#container-div {
@@ -73,6 +93,13 @@
 		display: none;
 	}
 </style>
+
+<a class="ad small" href="https://www.youtube.com/channel/UCkHqdbnaWOhsJDDSuouKplw">
+	Dev's Youtube Channel
+</a>
+<a class="ad large" href="https://www.youtube.com/channel/UCkHqdbnaWOhsJDDSuouKplw">
+	Please support the developer by subscribing to his Youtube Channel
+</a>
 
 <div id="container-div">
 	<div class="column-div">
