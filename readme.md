@@ -9,3 +9,8 @@ Now that everyone is fame farming, maybe some of you are wondering whether it's 
 - The right side shows the fame, fame credit, learning point, and silver costs of leveling.
 
 ![screenshot](screenshot.png)
+
+## Credits
+
+This wouldn't be possible without [broderickhyman/ao-bin-dumps](https://github.com/broderickhyman/ao-bin-dumps) and phendryx.
+Thank you!
