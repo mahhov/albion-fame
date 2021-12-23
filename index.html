@@ -104,14 +104,6 @@
 <div id="container-div">
 	<div class="column-div">
 		<div class="top-div">
-			<select id="gear-slot-input">
-				<option value="">2H Weapon</option>
-				<option value="" disabled>(todo) 1H Weapon</option>
-				<option value="" disabled>(todo) Head</option>
-				<option value="" disabled>(todo) Chest</option>
-				<option value="" disabled>(todo) Feet</option>
-				<option value="" disabled>(todo) Offhand</option>
-			</select>
 			<select id="artifact-input">
 				<option value="">Non Artifact</option>
 				<option value="true">Artifact</option>
@@ -157,6 +149,14 @@
 
 	<div class="column-div">
 		<div class="top-div">
+			<select id="gear-slot-input">
+				<option value="weapon2h">2H Weapon</option>
+				<option value="weapon1h">1H Weapon</option>
+				<option value="head">Head</option>
+				<option value="chest">Chest</option>
+				<option value="feet">Feet</option>
+				<option value="offhand" disabled>(todo) Offhand</option>
+			</select>
 			<input id="level-goal-input" placeholder="destination level" type="number" step="1" value="120">
 			<div class="interpretation">
 				<div id="fame-cost-interpretation-normal">
@@ -174,7 +174,7 @@
 				<div id="fame-cost-interpretation-elite">
 					It will cost
 					<span id="fame-cost-interpretation-elite-fame-credit"></span>
-					fame AND
+					fame credits AND
 					<span id="fame-cost-interpretation-elite-silver"></span>
 					silver to level from
 					<span id="fame-cost-interpretation-elite-level"></span>
@@ -200,7 +200,6 @@
 				<tbody class="table-section">
 					<tr>
 						<td>Lvl</td>
-						<td>Fame</td>
 						<td>Fame Credit</td>
 						<td>Silver</td>
 					</tr>
@@ -230,7 +229,7 @@
 	const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 	const prettyNum = value => Math.round(value).toLocaleString();
 
-	// todo connect with bin dump
+	// https://raw.githubusercontent.com/broderickhyman/ao-bin-dumps/master/achievements.xml
 	const data = {
 		normal: [
 			{fame: 57861, learningPoints: 8.5},
@@ -365,6 +364,14 @@
 			nonArtifactIpPerLevel: .2,
 			artifactIpPerLevel: .1,
 		},
+		multipliers: {
+			weapon2h: 1,
+			weapon1h: 1,
+			head: .25,
+			chest: .5,
+			feet: .25,
+			// offhand: .05,
+		},
 	};
 
 	let getFamePerIp = (main, artifact, elite, level) => {
@@ -395,6 +402,7 @@
 	};
 
 	let inputChanged = () => {
+		let gearSlot = $('#gear-slot-input').value;
 		let artifact = !!$('#artifact-input').value;
 		// level and levelGoal are 1-indexed
 		let level = clamp(Math.floor($('#level-input').value), 1, data.consts.normalLevels + data.consts.eliteLevels);
@@ -405,6 +413,7 @@
 		let mainElite = level > data.consts.normalLevels;
 		let mainLevel = (level - 1) % data.consts.normalLevels;
 		let mainFamePerIp = getFamePerIp(true, artifact, mainElite, mainLevel);
+		let gearSlotMultiplier = data.multipliers[gearSlot];
 
 		let famesPerNormalLevel = [...Array(data.consts.normalLevels)]
 			.map((_, i) => ({
@@ -452,7 +461,7 @@
 			let cost = sumNormalLevelCost(level - 1, Math.min(levelGoal, 100) - 1);
 			$('#fame-cost-interpretation-normal-fame').textContent = prettyNum(cost.fame);
 			$('#fame-cost-interpretation-normal-learning-points-fame').textContent = prettyNum(cost.fame * .8);
-			$('#fame-cost-interpretation-normal-learning-points').textContent = prettyNum(cost.learningPoints);
+			$('#fame-cost-interpretation-normal-learning-points').textContent = prettyNum(cost.learningPoints * gearSlotMultiplier);
 			$('#fame-cost-interpretation-normal-level').textContent = level;
 			$('#fame-cost-interpretation-normal-level-goal').textContent = Math.min(levelGoal, 100);
 		} else
@@ -461,8 +470,8 @@
 		if (levelGoal > 100 && level < levelGoal) {
 			$('#fame-cost-interpretation-elite').classList.remove('hidden');
 			let cost = sumEliteLevelCost(Math.max(level, 100) - 100, levelGoal - 100);
-			$('#fame-cost-interpretation-elite-fame-credit').textContent = prettyNum(cost.fameCredit);
-			$('#fame-cost-interpretation-elite-silver').textContent = prettyNum(cost.silver);
+			$('#fame-cost-interpretation-elite-fame-credit').textContent = prettyNum(cost.fameCredit * gearSlotMultiplier);
+			$('#fame-cost-interpretation-elite-silver').textContent = prettyNum(cost.silver * gearSlotMultiplier);
 			$('#fame-cost-interpretation-elite-level').textContent = Math.max(level, 100);
 			$('#fame-cost-interpretation-elite-level-goal').textContent = levelGoal;
 		} else
@@ -472,8 +481,8 @@
 		for (let i = 0; i < data.consts.normalLevels; i++) {
 			let row = createEl('tr', $('#lp-normal'));
 			createEl('td', row, i + 1);
-			createEl('td', row, data.normal[i].fame);
-			createEl('td', row, data.normal[i].learningPoints);
+			createEl('td', row, prettyNum(data.normal[i].fame));
+			createEl('td', row, prettyNum(data.normal[i].learningPoints * gearSlotMultiplier));
 			createEl('td', row, prettyNum(data.normal[i].fame / data.normal[i].learningPoints));
 		}
 
@@ -481,12 +490,12 @@
 		for (let i = 0; i < data.consts.eliteLevels; i++) {
 			let row = createEl('tr', $('#fame-credits-elite'));
 			createEl('td', row, i + data.consts.normalLevels + 1);
-			createEl('td', row, data.elite[i].fame);
-			createEl('td', row, prettyNum(data.elite[i].fame / data.consts.famePerFameCredit));
-			createEl('td', row, prettyNum(data.elite[i].fame / data.consts.famePerFameCredit * data.consts.eliteSilverPerFameCredit));
+			createEl('td', row, prettyNum(data.elite[i].fame / data.consts.famePerFameCredit * gearSlotMultiplier));
+			createEl('td', row, prettyNum(data.elite[i].fame / data.consts.famePerFameCredit * data.consts.eliteSilverPerFameCredit * gearSlotMultiplier));
 		}
 	};
 
+	$('#gear-slot-input').addEventListener('change', inputChanged);
 	$('#artifact-input').addEventListener('change', inputChanged);
 	$('#level-input').addEventListener('change', inputChanged);
 	$('#level-goal-input').addEventListener('change', inputChanged);
