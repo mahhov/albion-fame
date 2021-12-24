@@ -210,295 +210,308 @@
 	</div>
 </div>
 
-<script>
-	const $ = document.querySelector.bind(document);
-	const $$ = query => [...document.querySelectorAll(query)];
-	const clearChildren = el => {
-		while (el.firstChild)
-			el.removeChild(el.lastChild);
-	};
-	const createEl = (tag, parentEl = null, contents = '', classList = []) => {
-		let el = document.createElement(tag);
-		if (parentEl)
-			parentEl.appendChild(el);
-		if (contents)
-			el.textContent = contents;
-		el.classList.add(...classList);
-		return el;
-	};
-	const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-	const prettyNum = (value, maximumFractionDigits = 0) => value.toLocaleString(undefined, {maximumFractionDigits});
+<head>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-DFPTXWFR63"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
 
-	// https://raw.githubusercontent.com/broderickhyman/ao-bin-dumps/master/achievements.xml
-	const data = {
-		normal: [
-			{fame: 57861, learningPoints: 8.5},
-			{fame: 59565, learningPoints: 8.5},
-			{fame: 61323, learningPoints: 8.5},
-			{fame: 63130, learningPoints: 9},
-			{fame: 64991, learningPoints: 9},
-			{fame: 66907, learningPoints: 9},
-			{fame: 68880, learningPoints: 9},
-			{fame: 70911, learningPoints: 10},
-			{fame: 73002, learningPoints: 10},
-			{fame: 75155, learningPoints: 10},
-			{fame: 77370, learningPoints: 10.5},
-			{fame: 79651, learningPoints: 10.5},
-			{fame: 82000, learningPoints: 10.5},
-			{fame: 84419, learningPoints: 11},
-			{fame: 86908, learningPoints: 11},
-			{fame: 89470, learningPoints: 11},
-			{fame: 92108, learningPoints: 12},
-			{fame: 94822, learningPoints: 12},
-			{fame: 97619, learningPoints: 12},
-			{fame: 100496, learningPoints: 12.5},
-			{fame: 103461, learningPoints: 12.5},
-			{fame: 106511, learningPoints: 12.5},
-			{fame: 109650, learningPoints: 13},
-			{fame: 112884, learningPoints: 13},
-			{fame: 116212, learningPoints: 14},
-			{fame: 119639, learningPoints: 14},
-			{fame: 123167, learningPoints: 14},
-			{fame: 126799, learningPoints: 14.5},
-			{fame: 130537, learningPoints: 14.5},
-			{fame: 134384, learningPoints: 15},
-			{fame: 138347, learningPoints: 15},
-			{fame: 142428, learningPoints: 15.5},
-			{fame: 146625, learningPoints: 15.5},
-			{fame: 150949, learningPoints: 16.5},
-			{fame: 155400, learningPoints: 16.5},
-			{fame: 159981, learningPoints: 17.5},
-			{fame: 164698, learningPoints: 17.5},
-			{fame: 169554, learningPoints: 18},
-			{fame: 174554, learningPoints: 18},
-			{fame: 179701, learningPoints: 18.5},
-			{fame: 184998, learningPoints: 18.5},
-			{fame: 190454, learningPoints: 19},
-			{fame: 196068, learningPoints: 19},
-			{fame: 201850, learningPoints: 19.5},
-			{fame: 207800, learningPoints: 20},
-			{fame: 213928, learningPoints: 20},
-			{fame: 220237, learningPoints: 21.5},
-			{fame: 226729, learningPoints: 22},
-			{fame: 233413, learningPoints: 22},
-			{fame: 240297, learningPoints: 22.5},
-			{fame: 247381, learningPoints: 23},
-			{fame: 254674, learningPoints: 23},
-			{fame: 262184, learningPoints: 23.5},
-			{fame: 269914, learningPoints: 24},
-			{fame: 277872, learningPoints: 24},
-			{fame: 286065, learningPoints: 24.5},
-			{fame: 294501, learningPoints: 26},
-			{fame: 303184, learningPoints: 26.5},
-			{fame: 312122, learningPoints: 26.5},
-			{fame: 321326, learningPoints: 27},
-			{fame: 330800, learningPoints: 27.5},
-			{fame: 340552, learningPoints: 28},
-			{fame: 350594, learningPoints: 29},
-			{fame: 360930, learningPoints: 29.5},
-			{fame: 371572, learningPoints: 30.5},
-			{fame: 382529, learningPoints: 30.5},
-			{fame: 393806, learningPoints: 31},
-			{fame: 405419, learningPoints: 31.5},
-			{fame: 417372, learningPoints: 32},
-			{fame: 429677, learningPoints: 33},
-			{fame: 442345, learningPoints: 33.5},
-			{fame: 455389, learningPoints: 34},
-			{fame: 468816, learningPoints: 35},
-			{fame: 482639, learningPoints: 35.5},
-			{fame: 496869, learningPoints: 37},
-			{fame: 511518, learningPoints: 37.5},
-			{fame: 526601, learningPoints: 38},
-			{fame: 542126, learningPoints: 38.5},
-			{fame: 558111, learningPoints: 39.5},
-			{fame: 574565, learningPoints: 40.5},
-			{fame: 591507, learningPoints: 41.5},
-			{fame: 608948, learningPoints: 42},
-			{fame: 626902, learningPoints: 42.5},
-			{fame: 645385, learningPoints: 43},
-			{fame: 664415, learningPoints: 45},
-			{fame: 684004, learningPoints: 45.5},
-			{fame: 704173, learningPoints: 46},
-			{fame: 724935, learningPoints: 47},
-			{fame: 746309, learningPoints: 47.5},
-			{fame: 768313, learningPoints: 49.5},
-			{fame: 790965, learningPoints: 50},
-			{fame: 814287, learningPoints: 51},
-			{fame: 838295, learningPoints: 52},
-			{fame: 863013, learningPoints: 53.5},
-			{fame: 888458, learningPoints: 54},
-			{fame: 914653, learningPoints: 55},
-			{fame: 941622, learningPoints: 56.5},
-			{fame: 969383, learningPoints: 58},
-			{fame: 997965, learningPoints: 58.5},
-			{fame: 1027392, learningPoints: 60},
-		],
-		elite: [
-			{fame: 1056819},
-			{fame: 1117415},
-			{fame: 1238607},
-			{fame: 1420395},
-			{fame: 1662779},
-			{fame: 1965759},
-			{fame: 2329335},
-			{fame: 2753507},
-			{fame: 3238275},
-			{fame: 3783639},
-			{fame: 4389599},
-			{fame: 5056155},
-			{fame: 5783307},
-			{fame: 6571055},
-			{fame: 7419399},
-			{fame: 8328339},
-			{fame: 9297875},
-			{fame: 10328007},
-			{fame: 11418735},
-			{fame: 12570059},
-		],
-		consts: {
-			famePerFameCredit: 2,
-			eliteSilverPerFameCredit: .3,
-			normalLevels: 100,
-			eliteLevels: 20,
-			mainIpPerLevel: 2,
-			nonArtifactIpPerLevel: .2,
-			artifactIpPerLevel: .1,
-		},
-		multipliers: {
-			weapon2h: 1,
-			weapon1h: 1,
-			head: .25,
-			chest: .5,
-			feet: .25,
-			// offhand: .05,
-		},
-	};
+		function gtag() {
+			dataLayer.push(arguments);
+		}
 
-	let getFamePerIp = (main, artifact, elite, level) => {
-		let ip =
-			(main ? data.consts.mainIpPerLevel : 0) +
-			(artifact ? data.consts.artifactIpPerLevel : data.consts.nonArtifactIpPerLevel);
-		let fame = (elite ? data.elite : data.normal)[level].fame;
-		return fame / ip;
-	};
-
-	let sumNormalLevelCost = (start, end) =>
-		data.normal
-			.filter((_i, i) => i >= start && i < end)
-			.reduce((sum, level) => ({
-				fame: sum.fame + level.fame,
-				learningPoints: sum.learningPoints + level.learningPoints,
-			}), {fame: 0, learningPoints: 0});
-
-	let sumEliteLevelCost = (start, end) => {
-		let fame = data.elite
-			.filter((_i, i) => i >= start && i < end)
-			.reduce((sum, level) => sum + level.fame, 0);
-		return {
-			fame,
-			fameCredit: fame / data.consts.famePerFameCredit,
-			silver: fame / data.consts.famePerFameCredit * data.consts.eliteSilverPerFameCredit,
+		gtag('js', new Date());
+		gtag('config', 'G-DFPTXWFR63');
+	</script>
+	<script>
+		const $ = document.querySelector.bind(document);
+		const $$ = query => [...document.querySelectorAll(query)];
+		const clearChildren = el => {
+			while (el.firstChild)
+				el.removeChild(el.lastChild);
 		};
-	};
+		const createEl = (tag, parentEl = null, contents = '', classList = []) => {
+			let el = document.createElement(tag);
+			if (parentEl)
+				parentEl.appendChild(el);
+			if (contents)
+				el.textContent = contents;
+			el.classList.add(...classList);
+			return el;
+		};
+		const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+		const prettyNum = (value, maximumFractionDigits = 0) => value.toLocaleString(undefined, {maximumFractionDigits});
 
-	let inputChanged = () => {
-		let gearSlot = $('#gear-slot-input').value;
-		let artifact = !!$('#artifact-input').value;
-		// level and levelGoal are 1-indexed
-		let level = clamp(Math.floor($('#level-input').value), 1, data.consts.normalLevels + data.consts.eliteLevels);
-		$('#level-input').value = level;
-		let levelGoal = clamp(Math.floor($('#level-goal-input').value), level, data.consts.normalLevels + data.consts.eliteLevels);
-		$('#level-goal-input').value = levelGoal;
+		// https://raw.githubusercontent.com/broderickhyman/ao-bin-dumps/master/achievements.xml
+		const data = {
+			normal: [
+				{fame: 57861, learningPoints: 8.5},
+				{fame: 59565, learningPoints: 8.5},
+				{fame: 61323, learningPoints: 8.5},
+				{fame: 63130, learningPoints: 9},
+				{fame: 64991, learningPoints: 9},
+				{fame: 66907, learningPoints: 9},
+				{fame: 68880, learningPoints: 9},
+				{fame: 70911, learningPoints: 10},
+				{fame: 73002, learningPoints: 10},
+				{fame: 75155, learningPoints: 10},
+				{fame: 77370, learningPoints: 10.5},
+				{fame: 79651, learningPoints: 10.5},
+				{fame: 82000, learningPoints: 10.5},
+				{fame: 84419, learningPoints: 11},
+				{fame: 86908, learningPoints: 11},
+				{fame: 89470, learningPoints: 11},
+				{fame: 92108, learningPoints: 12},
+				{fame: 94822, learningPoints: 12},
+				{fame: 97619, learningPoints: 12},
+				{fame: 100496, learningPoints: 12.5},
+				{fame: 103461, learningPoints: 12.5},
+				{fame: 106511, learningPoints: 12.5},
+				{fame: 109650, learningPoints: 13},
+				{fame: 112884, learningPoints: 13},
+				{fame: 116212, learningPoints: 14},
+				{fame: 119639, learningPoints: 14},
+				{fame: 123167, learningPoints: 14},
+				{fame: 126799, learningPoints: 14.5},
+				{fame: 130537, learningPoints: 14.5},
+				{fame: 134384, learningPoints: 15},
+				{fame: 138347, learningPoints: 15},
+				{fame: 142428, learningPoints: 15.5},
+				{fame: 146625, learningPoints: 15.5},
+				{fame: 150949, learningPoints: 16.5},
+				{fame: 155400, learningPoints: 16.5},
+				{fame: 159981, learningPoints: 17.5},
+				{fame: 164698, learningPoints: 17.5},
+				{fame: 169554, learningPoints: 18},
+				{fame: 174554, learningPoints: 18},
+				{fame: 179701, learningPoints: 18.5},
+				{fame: 184998, learningPoints: 18.5},
+				{fame: 190454, learningPoints: 19},
+				{fame: 196068, learningPoints: 19},
+				{fame: 201850, learningPoints: 19.5},
+				{fame: 207800, learningPoints: 20},
+				{fame: 213928, learningPoints: 20},
+				{fame: 220237, learningPoints: 21.5},
+				{fame: 226729, learningPoints: 22},
+				{fame: 233413, learningPoints: 22},
+				{fame: 240297, learningPoints: 22.5},
+				{fame: 247381, learningPoints: 23},
+				{fame: 254674, learningPoints: 23},
+				{fame: 262184, learningPoints: 23.5},
+				{fame: 269914, learningPoints: 24},
+				{fame: 277872, learningPoints: 24},
+				{fame: 286065, learningPoints: 24.5},
+				{fame: 294501, learningPoints: 26},
+				{fame: 303184, learningPoints: 26.5},
+				{fame: 312122, learningPoints: 26.5},
+				{fame: 321326, learningPoints: 27},
+				{fame: 330800, learningPoints: 27.5},
+				{fame: 340552, learningPoints: 28},
+				{fame: 350594, learningPoints: 29},
+				{fame: 360930, learningPoints: 29.5},
+				{fame: 371572, learningPoints: 30.5},
+				{fame: 382529, learningPoints: 30.5},
+				{fame: 393806, learningPoints: 31},
+				{fame: 405419, learningPoints: 31.5},
+				{fame: 417372, learningPoints: 32},
+				{fame: 429677, learningPoints: 33},
+				{fame: 442345, learningPoints: 33.5},
+				{fame: 455389, learningPoints: 34},
+				{fame: 468816, learningPoints: 35},
+				{fame: 482639, learningPoints: 35.5},
+				{fame: 496869, learningPoints: 37},
+				{fame: 511518, learningPoints: 37.5},
+				{fame: 526601, learningPoints: 38},
+				{fame: 542126, learningPoints: 38.5},
+				{fame: 558111, learningPoints: 39.5},
+				{fame: 574565, learningPoints: 40.5},
+				{fame: 591507, learningPoints: 41.5},
+				{fame: 608948, learningPoints: 42},
+				{fame: 626902, learningPoints: 42.5},
+				{fame: 645385, learningPoints: 43},
+				{fame: 664415, learningPoints: 45},
+				{fame: 684004, learningPoints: 45.5},
+				{fame: 704173, learningPoints: 46},
+				{fame: 724935, learningPoints: 47},
+				{fame: 746309, learningPoints: 47.5},
+				{fame: 768313, learningPoints: 49.5},
+				{fame: 790965, learningPoints: 50},
+				{fame: 814287, learningPoints: 51},
+				{fame: 838295, learningPoints: 52},
+				{fame: 863013, learningPoints: 53.5},
+				{fame: 888458, learningPoints: 54},
+				{fame: 914653, learningPoints: 55},
+				{fame: 941622, learningPoints: 56.5},
+				{fame: 969383, learningPoints: 58},
+				{fame: 997965, learningPoints: 58.5},
+				{fame: 1027392, learningPoints: 60},
+			],
+			elite: [
+				{fame: 1056819},
+				{fame: 1117415},
+				{fame: 1238607},
+				{fame: 1420395},
+				{fame: 1662779},
+				{fame: 1965759},
+				{fame: 2329335},
+				{fame: 2753507},
+				{fame: 3238275},
+				{fame: 3783639},
+				{fame: 4389599},
+				{fame: 5056155},
+				{fame: 5783307},
+				{fame: 6571055},
+				{fame: 7419399},
+				{fame: 8328339},
+				{fame: 9297875},
+				{fame: 10328007},
+				{fame: 11418735},
+				{fame: 12570059},
+			],
+			consts: {
+				famePerFameCredit: 2,
+				eliteSilverPerFameCredit: .3,
+				normalLevels: 100,
+				eliteLevels: 20,
+				mainIpPerLevel: 2,
+				nonArtifactIpPerLevel: .2,
+				artifactIpPerLevel: .1,
+			},
+			multipliers: {
+				weapon2h: 1,
+				weapon1h: 1,
+				head: .25,
+				chest: .5,
+				feet: .25,
+				// offhand: .05,
+			},
+		};
 
-		let mainElite = level > data.consts.normalLevels;
-		let mainLevel = (level - 1) % data.consts.normalLevels;
-		let mainFamePerIp = getFamePerIp(true, artifact, mainElite, mainLevel);
-		let gearSlotMultiplier = data.multipliers[gearSlot];
+		let getFamePerIp = (main, artifact, elite, level) => {
+			let ip =
+				(main ? data.consts.mainIpPerLevel : 0) +
+				(artifact ? data.consts.artifactIpPerLevel : data.consts.nonArtifactIpPerLevel);
+			let fame = (elite ? data.elite : data.normal)[level].fame;
+			return fame / ip;
+		};
 
-		let famesPerNormalLevel = [...Array(data.consts.normalLevels)]
-			.map((_, i) => ({
-				main: getFamePerIp(true, artifact, false, i),
-				nonArtifact: getFamePerIp(false, false, false, i),
-				artifact: getFamePerIp(false, true, false, i),
-			}));
+		let sumNormalLevelCost = (start, end) =>
+			data.normal
+				.filter((_i, i) => i >= start && i < end)
+				.reduce((sum, level) => ({
+					fame: sum.fame + level.fame,
+					learningPoints: sum.learningPoints + level.learningPoints,
+				}), {fame: 0, learningPoints: 0});
 
-		let famesPerEliteLevel = [...Array(data.consts.eliteLevels)]
-			.map((_, i) => ({
-				main: getFamePerIp(true, artifact, true, i),
-				nonArtifact: getFamePerIp(false, false, true, i),
-				artifact: getFamePerIp(false, true, true, i),
-			}));
+		let sumEliteLevelCost = (start, end) => {
+			let fame = data.elite
+				.filter((_i, i) => i >= start && i < end)
+				.reduce((sum, level) => sum + level.fame, 0);
+			return {
+				fame,
+				fameCredit: fame / data.consts.famePerFameCredit,
+				silver: fame / data.consts.famePerFameCredit * data.consts.eliteSilverPerFameCredit,
+			};
+		};
 
-		$('#fame-per-ip-interpretation-non-artifact').textContent =
-			[...famesPerNormalLevel, ...famesPerEliteLevel]
-				.findIndex(fames => fames.nonArtifact > mainFamePerIp) + 1;
-		$('#fame-per-ip-interpretation-artifact').textContent =
-			[...famesPerNormalLevel, ...famesPerEliteLevel]
-				.findIndex(fames => fames.artifact > mainFamePerIp) + 1;
+		let inputChanged = () => {
+			let gearSlot = $('#gear-slot-input').value;
+			let artifact = !!$('#artifact-input').value;
+			// level and levelGoal are 1-indexed
+			let level = clamp(Math.floor($('#level-input').value), 1, data.consts.normalLevels + data.consts.eliteLevels);
+			$('#level-input').value = level;
+			let levelGoal = clamp(Math.floor($('#level-goal-input').value), level, data.consts.normalLevels + data.consts.eliteLevels);
+			$('#level-goal-input').value = levelGoal;
 
-		$$('.main-header').forEach(mainHeader => mainHeader.textContent = `${artifact ? '' : 'Non '} Artifact Main`);
+			let mainElite = level > data.consts.normalLevels;
+			let mainLevel = (level - 1) % data.consts.normalLevels;
+			let mainFamePerIp = getFamePerIp(true, artifact, mainElite, mainLevel);
+			let gearSlotMultiplier = data.multipliers[gearSlot];
 
-		let createFamePerIpEl = (fame, parentEl) => createEl('td', parentEl, prettyNum(fame), fame <= mainFamePerIp ? ['green'] : []);
+			let famesPerNormalLevel = [...Array(data.consts.normalLevels)]
+				.map((_, i) => ({
+					main: getFamePerIp(true, artifact, false, i),
+					nonArtifact: getFamePerIp(false, false, false, i),
+					artifact: getFamePerIp(false, true, false, i),
+				}));
 
-		clearChildren($('#fame-normal'));
-		for (let i = 0; i < data.consts.normalLevels; i++) {
-			let row = createEl('tr', $('#fame-normal'));
-			createEl('td', row, i + 1);
-			for (let key of ['main', 'nonArtifact', 'artifact'])
-				createFamePerIpEl(famesPerNormalLevel[i][key], row);
-		}
+			let famesPerEliteLevel = [...Array(data.consts.eliteLevels)]
+				.map((_, i) => ({
+					main: getFamePerIp(true, artifact, true, i),
+					nonArtifact: getFamePerIp(false, false, true, i),
+					artifact: getFamePerIp(false, true, true, i),
+				}));
 
-		clearChildren($('#fame-elite'));
-		for (let i = 0; i < data.consts.eliteLevels; i++) {
-			let row = createEl('tr', $('#fame-elite'));
-			createEl('td', row, i + data.consts.normalLevels + 1);
-			for (let key of ['main', 'nonArtifact', 'artifact'])
-				createFamePerIpEl(famesPerEliteLevel[i][key], row);
-		}
+			$('#fame-per-ip-interpretation-non-artifact').textContent =
+				[...famesPerNormalLevel, ...famesPerEliteLevel]
+					.findIndex(fames => fames.nonArtifact > mainFamePerIp) + 1;
+			$('#fame-per-ip-interpretation-artifact').textContent =
+				[...famesPerNormalLevel, ...famesPerEliteLevel]
+					.findIndex(fames => fames.artifact > mainFamePerIp) + 1;
 
-		if (level < 100 && level < levelGoal) {
-			$('#fame-cost-interpretation-normal').classList.remove('hidden');
-			let cost = sumNormalLevelCost(level - 1, Math.min(levelGoal, 100) - 1);
-			$('#fame-cost-interpretation-normal-fame').textContent = prettyNum(cost.fame);
-			$('#fame-cost-interpretation-normal-learning-points-fame').textContent = prettyNum(cost.fame * .8);
-			$('#fame-cost-interpretation-normal-learning-points').textContent = prettyNum(cost.learningPoints * gearSlotMultiplier);
-			$('#fame-cost-interpretation-normal-level').textContent = level;
-			$('#fame-cost-interpretation-normal-level-goal').textContent = Math.min(levelGoal, 100);
-		} else
-			$('#fame-cost-interpretation-normal').classList.add('hidden');
+			$$('.main-header').forEach(mainHeader => mainHeader.textContent = `${artifact ? '' : 'Non '} Artifact Main`);
 
-		if (levelGoal > 100 && level < levelGoal) {
-			$('#fame-cost-interpretation-elite').classList.remove('hidden');
-			let cost = sumEliteLevelCost(Math.max(level, 100) - 100, levelGoal - 100);
-			$('#fame-cost-interpretation-elite-fame-credit').textContent = prettyNum(cost.fameCredit * gearSlotMultiplier);
-			$('#fame-cost-interpretation-elite-silver').textContent = prettyNum(cost.silver * gearSlotMultiplier);
-			$('#fame-cost-interpretation-elite-level').textContent = Math.max(level, 100);
-			$('#fame-cost-interpretation-elite-level-goal').textContent = levelGoal;
-		} else
-			$('#fame-cost-interpretation-elite').classList.add('hidden');
+			let createFamePerIpEl = (fame, parentEl) => createEl('td', parentEl, prettyNum(fame), fame <= mainFamePerIp ? ['green'] : []);
 
-		clearChildren($('#lp-normal'));
-		for (let i = 0; i < data.consts.normalLevels; i++) {
-			let row = createEl('tr', $('#lp-normal'));
-			createEl('td', row, i + 1);
-			createEl('td', row, prettyNum(data.normal[i].fame));
-			createEl('td', row, prettyNum(data.normal[i].learningPoints * gearSlotMultiplier, 2));
-			createEl('td', row, prettyNum(data.normal[i].fame / data.normal[i].learningPoints));
-		}
+			clearChildren($('#fame-normal'));
+			for (let i = 0; i < data.consts.normalLevels; i++) {
+				let row = createEl('tr', $('#fame-normal'));
+				createEl('td', row, i + 1);
+				for (let key of ['main', 'nonArtifact', 'artifact'])
+					createFamePerIpEl(famesPerNormalLevel[i][key], row);
+			}
 
-		clearChildren($('#fame-credits-elite'));
-		for (let i = 0; i < data.consts.eliteLevels; i++) {
-			let row = createEl('tr', $('#fame-credits-elite'));
-			createEl('td', row, i + data.consts.normalLevels + 1);
-			createEl('td', row, prettyNum(data.elite[i].fame / data.consts.famePerFameCredit * gearSlotMultiplier));
-			createEl('td', row, prettyNum(data.elite[i].fame / data.consts.famePerFameCredit * data.consts.eliteSilverPerFameCredit * gearSlotMultiplier));
-		}
-	};
+			clearChildren($('#fame-elite'));
+			for (let i = 0; i < data.consts.eliteLevels; i++) {
+				let row = createEl('tr', $('#fame-elite'));
+				createEl('td', row, i + data.consts.normalLevels + 1);
+				for (let key of ['main', 'nonArtifact', 'artifact'])
+					createFamePerIpEl(famesPerEliteLevel[i][key], row);
+			}
 
-	$('#gear-slot-input').addEventListener('change', inputChanged);
-	$('#artifact-input').addEventListener('change', inputChanged);
-	$('#level-input').addEventListener('change', inputChanged);
-	$('#level-goal-input').addEventListener('change', inputChanged);
-	inputChanged();
-</script>
-<script type="text/javascript" src="commit-time.js"></script>
+			if (level < 100 && level < levelGoal) {
+				$('#fame-cost-interpretation-normal').classList.remove('hidden');
+				let cost = sumNormalLevelCost(level - 1, Math.min(levelGoal, 100) - 1);
+				$('#fame-cost-interpretation-normal-fame').textContent = prettyNum(cost.fame);
+				$('#fame-cost-interpretation-normal-learning-points-fame').textContent = prettyNum(cost.fame * .8);
+				$('#fame-cost-interpretation-normal-learning-points').textContent = prettyNum(cost.learningPoints * gearSlotMultiplier);
+				$('#fame-cost-interpretation-normal-level').textContent = level;
+				$('#fame-cost-interpretation-normal-level-goal').textContent = Math.min(levelGoal, 100);
+			} else
+				$('#fame-cost-interpretation-normal').classList.add('hidden');
+
+			if (levelGoal > 100 && level < levelGoal) {
+				$('#fame-cost-interpretation-elite').classList.remove('hidden');
+				let cost = sumEliteLevelCost(Math.max(level, 100) - 100, levelGoal - 100);
+				$('#fame-cost-interpretation-elite-fame-credit').textContent = prettyNum(cost.fameCredit * gearSlotMultiplier);
+				$('#fame-cost-interpretation-elite-silver').textContent = prettyNum(cost.silver * gearSlotMultiplier);
+				$('#fame-cost-interpretation-elite-level').textContent = Math.max(level, 100);
+				$('#fame-cost-interpretation-elite-level-goal').textContent = levelGoal;
+			} else
+				$('#fame-cost-interpretation-elite').classList.add('hidden');
+
+			clearChildren($('#lp-normal'));
+			for (let i = 0; i < data.consts.normalLevels; i++) {
+				let row = createEl('tr', $('#lp-normal'));
+				createEl('td', row, i + 1);
+				createEl('td', row, prettyNum(data.normal[i].fame));
+				createEl('td', row, prettyNum(data.normal[i].learningPoints * gearSlotMultiplier, 2));
+				createEl('td', row, prettyNum(data.normal[i].fame / data.normal[i].learningPoints));
+			}
+
+			clearChildren($('#fame-credits-elite'));
+			for (let i = 0; i < data.consts.eliteLevels; i++) {
+				let row = createEl('tr', $('#fame-credits-elite'));
+				createEl('td', row, i + data.consts.normalLevels + 1);
+				createEl('td', row, prettyNum(data.elite[i].fame / data.consts.famePerFameCredit * gearSlotMultiplier));
+				createEl('td', row, prettyNum(data.elite[i].fame / data.consts.famePerFameCredit * data.consts.eliteSilverPerFameCredit * gearSlotMultiplier));
+			}
+		};
+
+		$('#gear-slot-input').addEventListener('change', inputChanged);
+		$('#artifact-input').addEventListener('change', inputChanged);
+		$('#level-input').addEventListener('change', inputChanged);
+		$('#level-goal-input').addEventListener('change', inputChanged);
+		inputChanged();
+	</script>
+	<script type="text/javascript" src="commit-time.js"></script>
+</head>
