@@ -7,10 +7,10 @@
 		position: relative;
 	}
 
-	.ad {
+	.top-right {
 		position: absolute;
 		right: 0;
-		color: red;
+		text-align: right;
 	}
 
 	@media (min-width: 1800px) {
@@ -23,6 +23,10 @@
 		.ad.large {
 			display: none;
 		}
+	}
+
+	a {
+		color: red;
 	}
 
 	#container-div {
@@ -49,6 +53,10 @@
 		margin-top: 15px;
 		flex: 1;
 		overflow: auto;
+	}
+
+	input[type=number] {
+		width: 50px;
 	}
 
 	.interpretation {
@@ -94,12 +102,21 @@
 	}
 </style>
 
-<a class="ad small" href="https://www.youtube.com/channel/UCkHqdbnaWOhsJDDSuouKplw">
-	Dev's Youtube Channel
-</a>
-<a class="ad large" href="https://www.youtube.com/channel/UCkHqdbnaWOhsJDDSuouKplw">
-	You can support the developer by subscribing to his Youtube Channel
-</a>
+<div class="top-right">
+	<div>
+		<a class="ad small" href="https://www.youtube.com/channel/UCkHqdbnaWOhsJDDSuouKplw">
+			Dev's Youtube Channel
+		</a>
+		<a class="ad large" href="https://www.youtube.com/channel/UCkHqdbnaWOhsJDDSuouKplw">
+			You can support the developer by subscribing to his Youtube Channel
+		</a>
+	</div>
+	<div>
+		<a class="guide" href="https://github.com/mahhov/albion-fame#guide">
+			Instructions
+		</a>
+	</div>
+</div>
 
 <div id="container-div">
 	<div class="column-div">
