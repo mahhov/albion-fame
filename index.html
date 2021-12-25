@@ -13,13 +13,13 @@
 		color: red;
 	}
 
-	@media (min-width: 1500px) {
+	@media (min-width: 1800px) {
 		.ad.small {
 			display: none;
 		}
 	}
 
-	@media not all and (min-width: 1500px) {
+	@media not all and (min-width: 1800px) {
 		.ad.large {
 			display: none;
 		}
@@ -166,7 +166,9 @@
 					<span id="fame-cost-interpretation-normal-learning-points-fame"></span>
 					fame and
 					<span id="fame-cost-interpretation-normal-learning-points"></span>
-					learning points to level from
+					learning points OR
+					<span id="fame-cost-interpretation-normal-fame-credits"></span>
+					fame credits to level from
 					<span id="fame-cost-interpretation-normal-level"></span>
 					to
 					<span id="fame-cost-interpretation-normal-level-goal"></span>.
@@ -402,16 +404,12 @@
 					learningPoints: sum.learningPoints + level.learningPoints,
 				}), {fame: 0, learningPoints: 0});
 
-		let sumEliteLevelCost = (start, end) => {
-			let fame = data.elite
-				.filter((_i, i) => i >= start && i < end)
-				.reduce((sum, level) => sum + level.fame, 0);
-			return {
-				fame,
-				fameCredit: fame / data.consts.famePerFameCredit,
-				silver: fame / data.consts.famePerFameCredit * data.consts.eliteSilverPerFameCredit,
-			};
-		};
+		let sumEliteLevelCost = (start, end) => (
+			{
+				fame: data.elite
+					.filter((_i, i) => i >= start && i < end)
+					.reduce((sum, level) => sum + level.fame, 0),
+			});
 
 		let inputChanged = () => {
 			let gearSlot = $('#gear-slot-input').value;
@@ -474,6 +472,7 @@
 				$('#fame-cost-interpretation-normal-fame').textContent = prettyNum(cost.fame);
 				$('#fame-cost-interpretation-normal-learning-points-fame').textContent = prettyNum(cost.fame * .8);
 				$('#fame-cost-interpretation-normal-learning-points').textContent = prettyNum(cost.learningPoints * gearSlotMultiplier);
+				$('#fame-cost-interpretation-normal-fame-credits').textContent = prettyNum(cost.fame / data.consts.famePerFameCredit * gearSlotMultiplier);
 				$('#fame-cost-interpretation-normal-level').textContent = level;
 				$('#fame-cost-interpretation-normal-level-goal').textContent = Math.min(levelGoal, 100);
 			} else
@@ -482,8 +481,8 @@
 			if (levelGoal > 100 && level < levelGoal) {
 				$('#fame-cost-interpretation-elite').classList.remove('hidden');
 				let cost = sumEliteLevelCost(Math.max(level, 100) - 100, levelGoal - 100);
-				$('#fame-cost-interpretation-elite-fame-credit').textContent = prettyNum(cost.fameCredit * gearSlotMultiplier);
-				$('#fame-cost-interpretation-elite-silver').textContent = prettyNum(cost.silver * gearSlotMultiplier);
+				$('#fame-cost-interpretation-elite-fame-credit').textContent = prettyNum(cost.fame / data.consts.famePerFameCredit * gearSlotMultiplier);
+				$('#fame-cost-interpretation-elite-silver').textContent = prettyNum(cost.fame / data.consts.famePerFameCredit * data.consts.eliteSilverPerFameCredit * gearSlotMultiplier);
 				$('#fame-cost-interpretation-elite-level').textContent = Math.max(level, 100);
 				$('#fame-cost-interpretation-elite-level-goal').textContent = levelGoal;
 			} else
