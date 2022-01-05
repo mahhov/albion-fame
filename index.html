@@ -55,8 +55,22 @@
 		overflow: auto;
 	}
 
+	select {
+		width: 100px;
+		height: 18px;
+		background: black;
+		color: #acf;
+		border: none;
+		outline: 1px solid;
+	}
+
 	input[type=number] {
 		width: 50px;
+		height: 18px;
+		background: black;
+		color: #acf;
+		border: none;
+		outline: 1px solid;
 	}
 
 	.interpretation {
@@ -121,11 +135,13 @@
 <div id="container-div">
 	<div class="column-div">
 		<div class="top-div">
-			<select id="artifact-input">
-				<option value="">Non Artifact</option>
-				<option value="true">Artifact</option>
-			</select>
-			<input id="level-input" placeholder="level" type="number" step="1" value="100">
+			<div class="input-div">
+				<select id="artifact-input">
+					<option value="">Non Artifact</option>
+					<option value="true">Artifact</option>
+				</select>
+				<input id="level-input" placeholder="level" type="number" step="1" value="100">
+			</div>
 			<div class="interpretation">
 				<div>
 					Other non artifact gear should be leveled to
@@ -166,15 +182,17 @@
 
 	<div class="column-div">
 		<div class="top-div">
-			<select id="gear-slot-input">
-				<option value="weapon2h">2H Weapon</option>
-				<option value="weapon1h">1H Weapon</option>
-				<option value="head">Head</option>
-				<option value="chest">Chest</option>
-				<option value="feet">Feet</option>
-				<option value="offhand" disabled>(todo) Offhand</option>
-			</select>
-			<input id="level-goal-input" placeholder="destination level" type="number" step="1" value="120">
+			<div class="input-div">
+				<select id="gear-slot-input">
+					<option value="weapon2h">2H Weapon</option>
+					<option value="weapon1h">1H Weapon</option>
+					<option value="head">Head</option>
+					<option value="chest">Chest</option>
+					<option value="feet">Feet</option>
+					<option value="offhand" disabled>(todo) Offhand</option>
+				</select>
+				<input id="level-goal-input" placeholder="destination level" type="number" step="1" value="120">
+			</div>
 			<div class="interpretation">
 				<div id="fame-cost-interpretation-normal">
 					It will cost
