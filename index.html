@@ -128,12 +128,12 @@
 			<input id="level-input" placeholder="level" type="number" step="1" value="100">
 			<div class="interpretation">
 				<div>
-					Other non artifact gear should be leveled until
-					<span id="fame-per-ip-interpretation-non-artifact">85</span>.
+					Other non artifact gear should be leveled to
+					<span id="fame-per-ip-interpretation-non-artifact"></span>.
 				</div>
 				<div>
-					Other artifact gear should be leveled until
-					<span id="fame-per-ip-interpretation-artifact">100</span>.
+					Other artifact gear should be leveled to
+					<span id="fame-per-ip-interpretation-artifact"></span>.
 				</div>
 			</div>
 		</div>
@@ -458,10 +458,10 @@
 
 			$('#fame-per-ip-interpretation-non-artifact').textContent =
 				[...famesPerNormalLevel, ...famesPerEliteLevel]
-					.findIndex(fames => fames.nonArtifact > mainFamePerIp) + 1;
+					.findIndex(fames => fames.nonArtifact > mainFamePerIp);
 			$('#fame-per-ip-interpretation-artifact').textContent =
 				[...famesPerNormalLevel, ...famesPerEliteLevel]
-					.findIndex(fames => fames.artifact > mainFamePerIp) + 1;
+					.findIndex(fames => fames.artifact > mainFamePerIp);
 
 			$$('.main-header').forEach(mainHeader => mainHeader.textContent = `${artifact ? '' : 'Non '} Artifact Main`);
 
