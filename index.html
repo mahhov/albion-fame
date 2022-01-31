@@ -507,7 +507,7 @@
 				$('#fame-cost-interpretation-normal').classList.remove('hidden');
 				let cost = sumNormalLevelCost(level - 1, Math.min(levelGoal, 100) - 1);
 				$('#fame-cost-interpretation-normal-fame').textContent = prettyNum(cost.fame);
-				$('#fame-cost-interpretation-normal-learning-points-fame').textContent = prettyNum(cost.fame * .8);
+				$('#fame-cost-interpretation-normal-learning-points-fame').textContent = prettyNum(cost.fame * .2);
 				$('#fame-cost-interpretation-normal-learning-points').textContent = prettyNum(cost.learningPoints * gearSlotMultiplier);
 				$('#fame-cost-interpretation-normal-fame-credits').textContent = prettyNum(cost.fame / data.consts.famePerFameCredit * gearSlotMultiplier);
 				$('#fame-cost-interpretation-normal-level').textContent = level;
