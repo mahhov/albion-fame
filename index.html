@@ -13,6 +13,14 @@
 		text-align: right;
 	}
 
+	#tooltip {
+		position: absolute;
+		background: #333;
+		outline: 1px solid #aaa;
+		padding: 2px;
+		max-width: 500px;
+	}
+
 	@media (min-width: 1800px) {
 		.ad.small {
 			display: none;
@@ -132,16 +140,21 @@
 	</div>
 </div>
 
+<div id="tooltip" class="hidden"></div>
+
 <div id="container-div">
 	<div class="column-div">
 		<div class="top-div">
 			<div class="input-div">
-				<select id="artifact-input">
+				<select id="artifact-input"
+				        data-tooltip="Select whether your main gear is artifact or not.">
 					<option value="">Non Artifact</option>
 					<option value="true">Artifact</option>
 				</select>
-				<input id="level-input" placeholder="level" type="number" step="1" value="100">
-				<input id="silver-per-fame-input" placeholder="silver" type="number" step=".1" value="0">
+				<input id="level-input" placeholder="level" type="number" step="1" value="100"
+				       data-tooltip="Input the current spec level to calculate the fame efficient specs of similar gear.">
+				<input id="silver-per-fame-input" placeholder="silver" type="number" step=".1" value="0"
+				       data-tooltip="Input the silver value of 1 fame. Reasonable values are: 1.7 if you use tradable tomes, 1.2 if you use auto-respec, 1 if you use a satchel, or 0 if you'd rather not convert silver to fame. This effects the fame/ip calculation of elite levels which cost silver in addition to fame credits.">
 			</div>
 			<div class="interpretation">
 				<div>
@@ -184,7 +197,8 @@
 	<div class="column-div">
 		<div class="top-div">
 			<div class="input-div">
-				<select id="gear-slot-input">
+				<select id="gear-slot-input"
+				        data-tooltip="The gear slot effects learning point, fame credit, and silver costs of leveling.">
 					<option value="weapon2h">2H Weapon</option>
 					<option value="weapon1h">1H Weapon</option>
 					<option value="head">Head</option>
@@ -192,7 +206,8 @@
 					<option value="feet">Feet</option>
 					<option value="offhand" disabled>(todo) Offhand</option>
 				</select>
-				<input id="level-goal-input" placeholder="destination level" type="number" step="1" value="120">
+				<input id="level-goal-input" placeholder="destination level" type="number" step="1" value="120"
+				       data-tooltip="Input the desired spec level to calculate the cost of leveling to it.">
 			</div>
 			<div class="interpretation">
 				<div id="fame-cost-interpretation-normal">
@@ -450,6 +465,8 @@
 					.reduce((sum, level) => sum + level.fame, 0),
 			});
 
+		let maxFamePerLearningPoint = data.normal[data.normal.length - 1].fame / data.normal[data.normal.length - 1].learningPoints;
+
 		let inputChanged = () => {
 			let gearSlot = $('#gear-slot-input').value;
 			let artifact = !!$('#artifact-input').value;
@@ -479,8 +496,6 @@
 					nonArtifact: getFamePerIp(false, false, true, i, silverPerFame),
 					artifact: getFamePerIp(false, true, true, i, silverPerFame),
 				}));
-
-			let maxFamePerLearningPoint = data.normal[data.normal.length - 1].fame / data.normal[data.normal.length - 1].learningPoints;
 
 			$('#fame-per-ip-interpretation-non-artifact').textContent =
 				[...famesPerNormalLevel, ...famesPerEliteLevel]
@@ -549,11 +564,29 @@
 			}
 		};
 
-		$('#gear-slot-input').addEventListener('change', inputChanged);
-		$('#artifact-input').addEventListener('change', inputChanged);
-		$('#level-input').addEventListener('change', inputChanged);
-		$('#silver-per-fame-input').addEventListener('change', inputChanged);
-		$('#level-goal-input').addEventListener('change', inputChanged);
+		let tooltip = (el, e) => {
+			if (el.dataset.tooltip) {
+				$('#tooltip').style.left = e.x;
+				$('#tooltip').style.top = e.y;
+				$('#tooltip').textContent = el.dataset.tooltip;
+				$('#tooltip').classList.remove('hidden');
+			} else
+				removeTooltip();
+		};
+
+		let removeTooltip = () => $('#tooltip').classList.add('hidden');
+
+		[
+			$('#gear-slot-input'),
+			$('#artifact-input'),
+			$('#level-input'),
+			$('#silver-per-fame-input'),
+			$('#level-goal-input'),
+		].forEach(el => {
+			el.addEventListener('change', inputChanged);
+			el.addEventListener('mousemove', e => tooltip(el, e));
+			el.addEventListener('mouseleave', removeTooltip);
+		});
 		inputChanged();
 	</script>
 	<script type="text/javascript" src="commit-time.js"></script>
