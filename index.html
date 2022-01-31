@@ -474,6 +474,8 @@
 					artifact: getFamePerIp(false, true, true, i),
 				}));
 
+			let maxFamePerLearningPoint = data.normal[data.normal.length - 1].fame / data.normal[data.normal.length - 1].learningPoints;
+
 			$('#fame-per-ip-interpretation-non-artifact').textContent =
 				[...famesPerNormalLevel, ...famesPerEliteLevel]
 					.findIndex(fames => fames.nonArtifact > mainFamePerIp);
@@ -529,7 +531,7 @@
 				createEl('td', row, i + 1);
 				createEl('td', row, prettyNum(data.normal[i].fame));
 				createEl('td', row, prettyNum(data.normal[i].learningPoints * gearSlotMultiplier, 2));
-				createEl('td', row, prettyNum(data.normal[i].fame / data.normal[i].learningPoints));
+				createEl('td', row, prettyNum(data.normal[i].fame / data.normal[i].learningPoints / maxFamePerLearningPoint, 2));
 			}
 
 			clearChildren($('#fame-credits-elite'));
