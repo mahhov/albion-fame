@@ -141,6 +141,7 @@
 					<option value="true">Artifact</option>
 				</select>
 				<input id="level-input" placeholder="level" type="number" step="1" value="100">
+				<input id="silver-per-fame-input" placeholder="silver" type="number" step=".1" value="0">
 			</div>
 			<div class="interpretation">
 				<div>
@@ -423,11 +424,14 @@
 			},
 		};
 
-		let getFamePerIp = (main, artifact, elite, level) => {
+		// For leveling from `level` to `level+1`.
+		let getFamePerIp = (main, artifact, elite, level, silverPerFame) => {
 			let ip =
 				(main ? data.consts.mainIpPerLevel : 0) +
 				(artifact ? data.consts.artifactIpPerLevel : data.consts.nonArtifactIpPerLevel);
 			let fame = (elite ? data.elite : data.normal)[level].fame;
+			if (elite)
+				fame += fame * .3 / silverPerFame;
 			return fame / ip;
 		};
 
@@ -451,12 +455,15 @@
 			let artifact = !!$('#artifact-input').value;
 			let level = clamp(Math.floor($('#level-input').value), 0, data.consts.normalLevels + data.consts.eliteLevels);
 			$('#level-input').value = level;
+			let silverPerFame = clamp($('#silver-per-fame-input').value, 0, 3);
+			$('#silver-per-fame-input').value = silverPerFame;
+			silverPerFame ||= Infinity;
 			let levelGoal = clamp(Math.floor($('#level-goal-input').value), level, data.consts.normalLevels + data.consts.eliteLevels);
 			$('#level-goal-input').value = levelGoal;
 
 			let mainElite = (level - 1) >= data.consts.normalLevels;
 			let mainLevel = (level - 1) % data.consts.normalLevels;
-			let mainFamePerIp = level ? getFamePerIp(true, artifact, mainElite, mainLevel) : 0;
+			let mainFamePerIp = level ? getFamePerIp(true, artifact, mainElite, mainLevel, silverPerFame) : 0;
 			let gearSlotMultiplier = data.multipliers[gearSlot];
 
 			let famesPerNormalLevel = [...Array(data.consts.normalLevels)]
@@ -468,9 +475,9 @@
 
 			let famesPerEliteLevel = [...Array(data.consts.eliteLevels)]
 				.map((_, i) => ({
-					main: getFamePerIp(true, artifact, true, i),
-					nonArtifact: getFamePerIp(false, false, true, i),
-					artifact: getFamePerIp(false, true, true, i),
+					main: getFamePerIp(true, artifact, true, i, silverPerFame),
+					nonArtifact: getFamePerIp(false, false, true, i, silverPerFame),
+					artifact: getFamePerIp(false, true, true, i, silverPerFame),
 				}));
 
 			let maxFamePerLearningPoint = data.normal[data.normal.length - 1].fame / data.normal[data.normal.length - 1].learningPoints;
@@ -545,6 +552,7 @@
 		$('#gear-slot-input').addEventListener('change', inputChanged);
 		$('#artifact-input').addEventListener('change', inputChanged);
 		$('#level-input').addEventListener('change', inputChanged);
+		$('#silver-per-fame-input').addEventListener('change', inputChanged);
 		$('#level-goal-input').addEventListener('change', inputChanged);
 		inputChanged();
 	</script>
